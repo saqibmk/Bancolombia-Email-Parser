@@ -19,6 +19,7 @@ const initDB = () => {
         bills: [],
         cards: [],
       },
+      transfers: [],
     })
     .write();
 };
