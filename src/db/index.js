@@ -83,4 +83,6 @@ export const saveTransfers = transfer =>
     .get('transfers')
     .push(transfer)
     .write();
+
+export const getTransactions = filter => db.get(filter).value();
 export default initDB;
