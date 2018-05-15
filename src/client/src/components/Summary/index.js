@@ -63,7 +63,6 @@ class Summary extends Component {
       .then(results => results.json())
       .then(data => {
         this.setState({ credit: data.transactions.tcred });
-        // console.log(data.transactions);
         this.getTotalCompras(data.transactions);
       });
     fetch('/api/transactions/retiros')
