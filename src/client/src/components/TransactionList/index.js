@@ -1,7 +1,6 @@
 import React, { Component } from 'react';
-import { Pagination, Table, Layout, Row, Col } from 'antd';
+import { Table, Layout, Row, Col } from 'antd';
 
-import numeral from 'numeral';
 const { Content } = Layout;
 const columns = [
   {

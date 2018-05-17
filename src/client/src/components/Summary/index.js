@@ -1,31 +1,18 @@
 import React, { Component } from 'react';
-import parseCurrency from '../helpers';
+import parseCurrency from '../../helpers';
 import numeral from 'numeral';
 import PurchaseSummary from './Purchases';
 import PaymentsSummary from './Payments';
 import WithdrawSummary from './Withdraws';
 import TransferSummary from './Transfers';
 import GrandTotal from './GrandTotal';
+// import { bindActionCreators } from 'redux';
+import { connect } from 'react-redux';
 
 import { Layout, Row, Col, Divider } from 'antd';
 const { Content } = Layout;
 
 class Summary extends Component {
-  constructor() {
-    super();
-    this.state = {
-      credit: [],
-      totalCredit: 0,
-      totalDebit: 0,
-      totalPurchaseAmount: 0,
-      totalWithdraws: 0,
-      totalBills: 0,
-      totalCards: 0,
-      totalPayments: 0,
-      totalTransfers: 0,
-      grandTotal: 0,
-    };
-  }
   getTotalCompras(compras) {
     const credit = compras.tcred.reduce((total, purchase) => {
       return total + parseCurrency(purchase.amount);
@@ -58,36 +45,31 @@ class Summary extends Component {
     }, 0);
     this.setState({ totalTransfers: total });
   }
-  componentDidMount() {
-    fetch('/api/transactions/compras')
-      .then(results => results.json())
-      .then(data => {
-        this.setState({ credit: data.transactions.tcred });
-        this.getTotalCompras(data.transactions);
-      });
-    fetch('/api/transactions/retiros')
-      .then(results => results.json())
-      .then(data => {
-        this.getTotalWithdraws(data.transactions);
-      });
-    fetch('/api/transactions/pagos')
-      .then(results => results.json())
-      .then(data => {
-        this.getTotalPayments(data.transactions);
-      });
-    fetch('/api/transactions/transfers')
-      .then(results => results.json())
-      .then(data => {
-        this.getTotalTranfers(data.transactions);
-      });
-  }
-  render() {
-    const grandTotal =
-      this.state.totalPurchaseAmount +
-      this.state.totalPayments +
-      this.state.totalWithdraws +
-      this.state.totalWithdraws;
+  // componentDidMount() {
+  //   fetch('/api/transactions/compras')
+  //     .then(results => results.json())
+  //     .then(data => {
+  //       this.setState({ credit: data.transactions.tcred });
+  //       this.getTotalCompras(data.transactions);
+  //     });
+  //   fetch('/api/transactions/retiros')
+  //     .then(results => results.json())
+  //     .then(data => {
+  //       this.getTotalWithdraws(data.transactions);
+  //     });
+  //   fetch('/api/transactions/pagos')
+  //     .then(results => results.json())
+  //     .then(data => {
+  //       this.getTotalPayments(data.transactions);
+  //     });
+  //   fetch('/api/transactions/transfers')
+  //     .then(results => results.json())
+  //     .then(data => {
+  //       this.getTotalTranfers(data.transactions);
+  //     });
+  // }
 
+  render() {
     return (
       <Layout>
         <Content>
@@ -95,8 +77,8 @@ class Summary extends Component {
             <Row type="flex" justify="center">
               <Col span={6}>
                 <GrandTotal
-                  total={numeral(grandTotal).format('$0,0.00')}
-                  readable={numeral(grandTotal).format('($ 0.00 a)')}
+                  total={numeral(this.props.summary.grandTotal).format('$0,0.00')}
+                  readable={numeral(this.props.summary.grandTotal).format('($ 0.00 a)')}
                 />
               </Col>
             </Row>
@@ -104,28 +86,28 @@ class Summary extends Component {
             <Row gutter={16} type="flex" justify="space-around" align="top">
               <Col span={6}>
                 <PurchaseSummary
-                  creditAmount={numeral(this.state.totalCredit).format('$0,0.00')}
-                  debitAmount={numeral(this.state.totalDebit).format('$0,0.00')}
-                  totalAmount={numeral(this.state.totalPurchaseAmount).format('($ 0.00 a)')}
+                  creditAmount={numeral(this.props.summary.totalCreditPurchase).format('$0,0.00')}
+                  debitAmount={numeral(this.props.summary.totalDebitPurchase).format('$0,0.00')}
+                  totalAmount={numeral(this.props.summary.totalPurchases).format('($ 0.00 a)')}
                 />
               </Col>
               <Col span={6}>
                 <PaymentsSummary
-                  totalCards={numeral(this.state.totalCards).format('$0,0.00')}
-                  totalBills={numeral(this.state.totalBills).format('$0,0.00')}
-                  totalAmount={numeral(this.state.totalPayments).format('($ 0.00 a)')}
+                  totalCards={numeral(this.props.summary.totalCardPayment).format('$0,0.00')}
+                  totalBills={numeral(this.props.summary.totalBillPayment).format('$0,0.00')}
+                  totalAmount={numeral(this.props.summary.totalPayments).format('($ 0.00 a)')}
                 />
               </Col>
               <Col span={6}>
                 <WithdrawSummary
-                  totalInNumber={numeral(this.state.totalWithdraws).format('$0,0.00')}
-                  totalInText={numeral(this.state.totalWithdraws).format('($ 0.00 a)')}
+                  totalInNumber={numeral(this.props.summary.totalWithdraws).format('$0,0.00')}
+                  totalInText={numeral(this.props.summary.totalWithdraws).format('($ 0.00 a)')}
                 />
               </Col>
               <Col span={6}>
                 <TransferSummary
-                  totalInNumber={this.state.totalTransfers}
-                  totalInText={this.state.totalTransfers}
+                  totalInNumber={this.props.summary.totalTransfers}
+                  totalInText={this.props.summary.totalTransfers}
                 />
               </Col>
             </Row>
@@ -136,4 +118,4 @@ class Summary extends Component {
   }
 }
 
-export default Summary;
+export default connect(state => ({ summary: state.summary }))(Summary);
