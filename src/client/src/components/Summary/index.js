@@ -1,15 +1,15 @@
-import React, { Component } from 'react';
-import parseCurrency from '../../helpers';
-import numeral from 'numeral';
-import PurchaseSummary from './Purchases';
-import PaymentsSummary from './Payments';
-import WithdrawSummary from './Withdraws';
-import TransferSummary from './Transfers';
-import GrandTotal from './GrandTotal';
+import React, { Component } from "react";
+import parseCurrency from "../../helpers";
+import numeral from "numeral";
+import PurchaseSummary from "./Purchases";
+import PaymentsSummary from "./Payments";
+import WithdrawSummary from "./Withdraws";
+import TransferSummary from "./Transfers";
+import GrandTotal from "./GrandTotal";
 // import { bindActionCreators } from 'redux';
-import { connect } from 'react-redux';
+import { connect } from "react-redux";
 
-import { Layout, Row, Col, Divider } from 'antd';
+import { Layout, Row, Col, Divider } from "antd";
 const { Content } = Layout;
 
 class Summary extends Component {
@@ -45,40 +45,20 @@ class Summary extends Component {
     }, 0);
     this.setState({ totalTransfers: total });
   }
-  // componentDidMount() {
-  //   fetch('/api/transactions/compras')
-  //     .then(results => results.json())
-  //     .then(data => {
-  //       this.setState({ credit: data.transactions.tcred });
-  //       this.getTotalCompras(data.transactions);
-  //     });
-  //   fetch('/api/transactions/retiros')
-  //     .then(results => results.json())
-  //     .then(data => {
-  //       this.getTotalWithdraws(data.transactions);
-  //     });
-  //   fetch('/api/transactions/pagos')
-  //     .then(results => results.json())
-  //     .then(data => {
-  //       this.getTotalPayments(data.transactions);
-  //     });
-  //   fetch('/api/transactions/transfers')
-  //     .then(results => results.json())
-  //     .then(data => {
-  //       this.getTotalTranfers(data.transactions);
-  //     });
-  // }
-
   render() {
     return (
       <Layout>
         <Content>
-          <div style={{ background: '#ECECEC', padding: '30px' }}>
+          <div style={{ background: "#ECECEC", padding: "30px" }}>
             <Row type="flex" justify="center">
               <Col span={6}>
                 <GrandTotal
-                  total={numeral(this.props.summary.grandTotal).format('$0,0.00')}
-                  readable={numeral(this.props.summary.grandTotal).format('($ 0.00 a)')}
+                  total={numeral(this.props.summary.grandTotal).format(
+                    "$0,0.00"
+                  )}
+                  readable={numeral(this.props.summary.grandTotal).format(
+                    "($ 0.00 a)"
+                  )}
                 />
               </Col>
             </Row>
@@ -86,22 +66,38 @@ class Summary extends Component {
             <Row gutter={16} type="flex" justify="space-around" align="top">
               <Col span={6}>
                 <PurchaseSummary
-                  creditAmount={numeral(this.props.summary.totalCreditPurchase).format('$0,0.00')}
-                  debitAmount={numeral(this.props.summary.totalDebitPurchase).format('$0,0.00')}
-                  totalAmount={numeral(this.props.summary.totalPurchases).format('($ 0.00 a)')}
+                  creditAmount={numeral(
+                    this.props.summary.totalCreditPurchase
+                  ).format("$0,0.00")}
+                  debitAmount={numeral(
+                    this.props.summary.totalDebitPurchase
+                  ).format("$0,0.00")}
+                  totalAmount={numeral(
+                    this.props.summary.totalPurchases
+                  ).format("($ 0.00 a)")}
                 />
               </Col>
               <Col span={6}>
                 <PaymentsSummary
-                  totalCards={numeral(this.props.summary.totalCardPayment).format('$0,0.00')}
-                  totalBills={numeral(this.props.summary.totalBillPayment).format('$0,0.00')}
-                  totalAmount={numeral(this.props.summary.totalPayments).format('($ 0.00 a)')}
+                  totalCards={numeral(
+                    this.props.summary.totalCardPayment
+                  ).format("$0,0.00")}
+                  totalBills={numeral(
+                    this.props.summary.totalBillPayment
+                  ).format("$0,0.00")}
+                  totalAmount={numeral(this.props.summary.totalPayments).format(
+                    "($ 0.00 a)"
+                  )}
                 />
               </Col>
               <Col span={6}>
                 <WithdrawSummary
-                  totalInNumber={numeral(this.props.summary.totalWithdraws).format('$0,0.00')}
-                  totalInText={numeral(this.props.summary.totalWithdraws).format('($ 0.00 a)')}
+                  totalInNumber={numeral(
+                    this.props.summary.totalWithdraws
+                  ).format("$0,0.00")}
+                  totalInText={numeral(
+                    this.props.summary.totalWithdraws
+                  ).format("($ 0.00 a)")}
                 />
               </Col>
               <Col span={6}>

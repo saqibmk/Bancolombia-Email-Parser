@@ -8,7 +8,7 @@ export default {
     totalPayments: 0,
     totalWithdraws: 0,
     totalTransfers: 0,
-    grandTotal: 0,
+    grandTotal: 0
   },
-  transactions: {},
+  transactions: {}
 };

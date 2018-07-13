@@ -6,22 +6,20 @@ const adapter = new FileSync('./db.json');
 const db = low(adapter);
 
 const initDB = () => {
-  db
-    .defaults({
-      config: {},
-      snippets: [],
-      compras: {
-        tcred: [],
-        tdeb: [],
-      },
-      retiros: [],
-      pagos: {
-        bills: [],
-        cards: [],
-      },
-      transfers: [],
-    })
-    .write();
+  db.defaults({
+    config: {},
+    snippets: [],
+    compras: {
+      tcred: [],
+      tdeb: [],
+    },
+    retiros: [],
+    pagos: {
+      bills: [],
+      cards: [],
+    },
+    transfers: [],
+  }).write();
 };
 
 export const saveCreds = (creds) => {
@@ -46,15 +44,13 @@ export const setLastRun = unixTimestamp => db.set('config.lastRun', unixTimestam
 export const saveCompra = (compra) => {
   switch (compra.cardType) {
     case CREDIT_CARD:
-      db
-        .get('compras.tcred')
+      db.get('compras.tcred')
         .push(compra)
         .write();
       break;
 
     default:
-      db
-        .get('compras.tdeb')
+      db.get('compras.tdeb')
         .push(compra)
         .write();
       break;
