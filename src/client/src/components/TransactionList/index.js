@@ -1,28 +1,28 @@
-import React, { Component } from 'react';
-import { Table, Layout, Row, Col } from 'antd';
+import React, { Component } from "react";
+import { Table, Layout, Row, Col } from "antd";
 
 const { Content } = Layout;
 const columns = [
   {
-    title: 'Date',
-    dataIndex: 'dateOfPurchase',
-    key: 'dateOfPurchase',
+    title: "Date",
+    dataIndex: "dateOfPurchase",
+    key: "dateOfPurchase"
   },
   {
-    title: 'Amount',
-    dataIndex: 'amount',
-    key: 'amount',
+    title: "Amount",
+    dataIndex: "amount",
+    key: "amount"
   },
   {
-    title: 'Merchant',
-    dataIndex: 'placeOfPurchase',
-    key: 'placeOfPurchase',
+    title: "Merchant",
+    dataIndex: "placeOfPurchase",
+    key: "placeOfPurchase"
   },
   {
-    title: 'Card',
-    dataIndex: 'cardNumber',
-    key: 'cardNumber',
-  },
+    title: "Card",
+    dataIndex: "cardNumber",
+    key: "cardNumber"
+  }
 ];
 
 class TransactionList extends Component {
@@ -30,22 +30,26 @@ class TransactionList extends Component {
     super();
     this.state = {
       credit: [],
-      debit: [],
+      debit: []
     };
   }
   componentDidMount() {
-    fetch('/api/transactions/compras')
+    fetch("/api/transactions/compras")
       .then(results => results.json())
-      .then(data => {
+      .then(({ transactions = {} }) => {
         this.setState({
-          credit: data.transactions.tcred,
-          debit: data.transactions.tdeb,
+          credit: transactions.tcred || [],
+          debit: transactions.tdeb || []
         });
       });
   }
   render() {
     const totalArray = [...this.state.credit, ...this.state.debit];
-    const paginationSettings = { position: 'top', pageSize: 30, hideOnSinglePage: true };
+    const paginationSettings = {
+      position: "top",
+      pageSize: 30,
+      hideOnSinglePage: true
+    };
     return (
       <Layout>
         <Content>
