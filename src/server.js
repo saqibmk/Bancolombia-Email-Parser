@@ -25,9 +25,22 @@ app.get("/api/auth/status", async (req, res) => {
 
 app.get("/api/transactions/sync", async (req, res) => {
   try {
-    const emailsSynced = await emailSync();
-    const lastRun = getLastRun();
-    res.status(200).send({ newTransactions: emailsSynced, lastRun });
+    const compras = getTransactions("compras");
+    const retiros = getTransactions("retiros");
+    const pagos = getTransactions("pagos");
+    const transfers = getTransactions("transfers");
+
+    const transactions = {
+      compras,
+      retiros,
+      pagos,
+      transfers
+    };
+    res.status(200).send({ transactions });
+    console.log(transactions);
+    // const emailsSynced = await emailSync();
+    // const lastRun = getLastRun();
+    //res.status(200).send({ newTransactions: emailsSynced, lastRun });
   } catch (error) {
     res.status(500).send({ error });
   }
