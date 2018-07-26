@@ -23,25 +23,47 @@
 // }
 
 export const SYNCING_TRANSACTIONS = "SYNCING_TRANSACTIONS";
-export const UPDATING_TRANSACTIONS = "UPDATING_TRANSACTIONS";
+export const DONE_SYNCING_TRANSACTIONS = "DONE_SYNCING_TRANSACTIONS";
+export const ERROR_SYNCING_TRANSACTIONS = "ERROR_SYNCING_TRANSACTIONS";
 export const NO_NEW_TRANSACTIONS = "NO_NEW_TRANSACTIONS";
-export const DONE_UPDATING_TRANSACTIONS = "DONE_UPDATING_TRANSACTIONS";
+export const UPDATE_LAST_SYNC_RUN = "UPDATE_LAST_SYNC_RUN";
+
+// export const UPDATING_TRANSACTIONS = "UPDATING_TRANSACTIONS";
 
 export const syncTransactions = () => ({
   type: SYNCING_TRANSACTIONS
 });
 
-export const doneSyncingTransaction = () => ({
-  type: DONE_UPDATING_TRANSACTIONS
+export const doneSyncingTransaction = data => ({
+  type: DONE_SYNCING_TRANSACTIONS,
+  data
+});
+
+export const noNewTransactions = () => ({
+  type: NO_NEW_TRANSACTIONS
+});
+
+export const errorSyncingTransactions = () => ({
+  type: ERROR_SYNCING_TRANSACTIONS
+});
+
+export const updateLastRun = data => ({
+  type: UPDATE_LAST_SYNC_RUN,
+  data
 });
 
 export default function fetchTransactions() {
   return dispatch => {
     dispatch(syncTransactions());
     fetch("/api/transactions/sync")
-      .then(results => results.json())
-      .then(data => console.log(data));
-
-    dispatch(doneSyncingTransaction());
+      .then(response => {
+        if (!response.ok) throw Error(response.statusText);
+        return response.json();
+      })
+      .then(data => {
+        if (data.newTransactions === 0) dispatch(noNewTransactions());
+        dispatch(doneSyncingTransaction(data));
+      })
+      .catch(error => dispatch(errorSyncingTransactions()));
   };
 }

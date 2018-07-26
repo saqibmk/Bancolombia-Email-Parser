@@ -4,7 +4,7 @@ import { getURL, getAuthTokenWithCode } from "./auth";
 import bodyParser from "body-parser";
 
 import emailSync from "./emails";
-import initDB, { saveCreds, setLastRun } from "./db";
+import initDB, { saveCreds, setLastRun, getLastRun } from "./db";
 import { getZeroMonth } from "./helpers";
 
 const app = express();
@@ -18,15 +18,19 @@ app.get("/api/hello", (req, res) => {
 app.get("/api/auth/status", async (req, res) => {
   const creds = await getCreds();
   res.send({
-    authReq: creds === undefined
+    authReq: creds === undefined,
+    lastRun: getLastRun()
   });
 });
 
 app.get("/api/transactions/sync", async (req, res) => {
-  const ret = await emailSync();
-  console.log(ret);
-  // console.log("here");
-  // res.status(200).send({ message: "Sync" });
+  try {
+    const emailsSynced = await emailSync();
+    const lastRun = getLastRun();
+    res.status(200).send({ newTransactions: emailsSynced, lastRun });
+  } catch (error) {
+    res.status(500).send({ error });
+  }
 });
 
 app.post("/api/auth/signin", async (req, res) => {

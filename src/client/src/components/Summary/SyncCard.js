@@ -3,6 +3,7 @@ import { Card, Row, Button, Icon } from "antd";
 import SyncMessage from "../SyncMessage";
 import { connect } from "react-redux";
 import fetchTransactions from "../../actions/transactions";
+import relativeDate from "tiny-relative-date";
 
 class SyncCard extends Component {
   render() {
@@ -12,15 +13,16 @@ class SyncCard extends Component {
         <Row type="flex" justify="center">
           <Button
             onClick={() => {
-              console.log("here");
               this.props.fetchTransactions();
-              // message.loading("Loading Transactions from email", 0);
             }}
           >
-            <Icon type="reload" /> Reload
+            <Icon type="reload" /> Sync
           </Button>
 
-          <div>Last Sync: Never</div>
+          <div>
+            Last sync:{" "}
+            {relativeDate(new Date(parseInt(this.props.lastRun) * 1000))}
+          </div>
         </Row>
       </Card>
     );
@@ -28,6 +30,6 @@ class SyncCard extends Component {
 }
 
 export default connect(
-  null,
+  state => ({ lastRun: state.transactions.lastRun }),
   { fetchTransactions }
 )(SyncCard);

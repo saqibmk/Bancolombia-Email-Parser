@@ -5,6 +5,7 @@ import emailParser from "./parser";
 const app = async () => {
   try {
     const emailsSynced = await emailSync();
+    console.log("emails synced: ", emailsSynced);
     if (emailsSynced > 0) {
       console.log("Parsing Emails...");
       await emailParser();

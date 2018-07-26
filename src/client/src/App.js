@@ -4,6 +4,7 @@ import TransactionList from "./components/TransactionList";
 import AuthMessage from "./components/AuthMessage";
 import { connect } from "react-redux";
 import { showAuthAlert, hideAuthAlert } from "../src/actions/auth";
+import { updateLastRun } from "../src/actions/transactions";
 
 import "./App.css";
 class App extends Component {
@@ -11,7 +12,7 @@ class App extends Component {
     fetch("/api/auth/status")
       .then(results => results.json())
       .then(data => {
-        console.log(this.props);
+        this.props.updateLastRun(data.lastRun);
         data.authReq ? this.props.showAuthAlert() : this.props.hideAuthAlert();
       });
   }
@@ -35,5 +36,5 @@ const mapStateToProps = state => {
 
 export default connect(
   mapStateToProps,
-  { showAuthAlert, hideAuthAlert }
+  { showAuthAlert, hideAuthAlert, updateLastRun }
 )(App);
