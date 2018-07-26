@@ -1,4 +1,3 @@
-import initialState from "./initialState";
 import {
   SHOW_AUTH_ALERT,
   HIDE_AUTH_ALERT,

@@ -9,7 +9,7 @@
     "start": "nodemon src/app.js --ignore db.json --exec babel-node --presets babel-preset-env",
     "init": "babel-node src/init.js --presets babel-preset-env",
     "client": "cd src/client && yarn start",
-    "server": "nodemon src/server.js --exec babel-node --presets babel-preset-env",
+    "server": "nodemon src/server.js --ignore db.json --exec babel-node --presets babel-preset-env",
     "dev": "concurrently --kill-others-on-fail \"yarn server\" \"yarn client\""
   },
   "devDependencies": {

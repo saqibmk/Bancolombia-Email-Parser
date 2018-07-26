@@ -22,8 +22,26 @@
 //     });
 // }
 
+export const SYNCING_TRANSACTIONS = "SYNCING_TRANSACTIONS";
+export const UPDATING_TRANSACTIONS = "UPDATING_TRANSACTIONS";
+export const NO_NEW_TRANSACTIONS = "NO_NEW_TRANSACTIONS";
+export const DONE_UPDATING_TRANSACTIONS = "DONE_UPDATING_TRANSACTIONS";
+
+export const syncTransactions = () => ({
+  type: SYNCING_TRANSACTIONS
+});
+
+export const doneSyncingTransaction = () => ({
+  type: DONE_UPDATING_TRANSACTIONS
+});
+
 export default function fetchTransactions() {
-  return (dispatch) => {
-    dispatch('item is loading');
+  return dispatch => {
+    dispatch(syncTransactions());
+    fetch("/api/transactions/sync")
+      .then(results => results.json())
+      .then(data => console.log(data));
+
+    dispatch(doneSyncingTransaction());
   };
 }

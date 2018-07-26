@@ -3,6 +3,7 @@ import { getCreds, getTransactions } from "./db";
 import { getURL, getAuthTokenWithCode } from "./auth";
 import bodyParser from "body-parser";
 import { saveCreds } from "./db";
+import emailSync from "./emails";
 
 const app = express();
 app.use(bodyParser.json());
@@ -17,6 +18,13 @@ app.get("/api/auth/status", async (req, res) => {
   res.send({
     authReq: creds.id_token === undefined
   });
+});
+
+app.get("/api/transactions/sync", async (req, res) => {
+  const ret = await emailSync();
+  console.log(ret);
+  // console.log("here");
+  // res.status(200).send({ message: "Sync" });
 });
 
 app.post("/api/auth/signin", async (req, res) => {

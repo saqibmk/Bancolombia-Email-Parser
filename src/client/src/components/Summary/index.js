@@ -6,6 +6,8 @@ import PaymentsSummary from "./Payments";
 import WithdrawSummary from "./Withdraws";
 import TransferSummary from "./Transfers";
 import GrandTotal from "./GrandTotal";
+import SyncCard from "./SyncCard";
+
 // import { bindActionCreators } from 'redux';
 import { connect } from "react-redux";
 
@@ -60,6 +62,9 @@ class Summary extends Component {
                     "($ 0.00 a)"
                   )}
                 />
+              </Col>
+              <Col span={4}>
+                <SyncCard />
               </Col>
             </Row>
             <Divider />

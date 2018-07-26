@@ -7,7 +7,7 @@ const readAuthFile = async () => {
   try {
     const readFile = promisify(fs.readFile);
     const data = await readFile("../client_secret.json");
-    console.log(JSON.parse(data));
+    // console.log(JSON.parse(data));
     return JSON.parse(data);
   } catch (error) {
     throw new Error(error);
