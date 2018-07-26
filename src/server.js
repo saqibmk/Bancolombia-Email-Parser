@@ -2,8 +2,10 @@ import express from "express";
 import { getCreds, getTransactions } from "./db";
 import { getURL, getAuthTokenWithCode } from "./auth";
 import bodyParser from "body-parser";
-import { saveCreds } from "./db";
+
 import emailSync from "./emails";
+import initDB, { saveCreds, setLastRun } from "./db";
+import { getZeroMonth } from "./helpers";
 
 const app = express();
 app.use(bodyParser.json());
@@ -16,7 +18,7 @@ app.get("/api/hello", (req, res) => {
 app.get("/api/auth/status", async (req, res) => {
   const creds = await getCreds();
   res.send({
-    authReq: creds.id_token === undefined
+    authReq: creds === undefined
   });
 });
 
@@ -30,6 +32,8 @@ app.get("/api/transactions/sync", async (req, res) => {
 app.post("/api/auth/signin", async (req, res) => {
   try {
     const authToken = await getAuthTokenWithCode(req.body.code);
+    initDB();
+    setLastRun(getZeroMonth());
     saveCreds(authToken);
     res
       .send({
